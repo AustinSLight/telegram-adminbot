@@ -1,17 +1,17 @@
 welcome =
-  Hey {$name}!
-
-  Writing translations for your bot is relatively easy once you know how to write proper fluent files.
+  Welcome {$name}!
+  Nice to meet you.
+  You can go to the homepage using the button below.
+  And using following button, you can send your address to Astra Dao.
+  
 
 help = This is some example help text.
 
 menu-back = back…
-menu-main = main…
-menu-settings = Settings
+menu-main = go back to main
+menu-settings = Follow
 menu-language = Language
 
-settings-body =
-  Feel free to set the settings you prefer.
-
-  Or as the developer: Feel free to add the things you want users to adjust.
+following-body =
+  Input your wallet address
 settings-language = Select your language

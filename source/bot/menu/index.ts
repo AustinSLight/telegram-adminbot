@@ -7,18 +7,22 @@ export const menu = new MenuTemplate<MyContext>(ctx =>
 );
 
 menu.url({
-	text: 'Telegram API Documentation',
-	url: 'https://core.telegram.org/bots/api',
+	text: 'Astra Dao Launchpad(test net)',
+	url: 'https://next.test.astradao.org/launchpad',
 });
 menu.url({
-	text: 'grammY Documentation',
-	url: 'https://grammy.dev/',
+	text: 'Buy Astra Dao (test net)',
+	url: 'https://next.test.astradao.org/how-to-buy',
 });
 menu.url({
-	text: 'Inline Menu Documentation',
-	url: 'https://github.com/EdJoPaTo/grammy-inline-menu',
+	text: 'Astra Dao Owner(test net)',
+	url: 'https://next.test.astradao.org/launchpad/owner',
 });
 
-menu.submenu('settings', settingsMenu, {
-	text: ctx => '⚙️' + ctx.t('menu-settings'),
+// menu.submenu('settings', settingsMenu, {
+// 	text: ctx => '⚙️' + ctx.t('menu-settings'),
+// });
+menu.submenu('follow', settingsMenu, {
+	text: ctx => '✅' + ctx.t('menu-settings'),
 });
+
