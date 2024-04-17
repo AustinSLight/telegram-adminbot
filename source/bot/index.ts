@@ -4,8 +4,6 @@ import { config as dotenv } from "dotenv";
 import { Bot, session } from "grammy";
 import { MenuMiddleware } from "grammy-inline-menu";
 import { generateUpdateMiddleware } from "telegraf-middleware-console-time";
-
-// import { html as format } from "telegram-format";
 import { i18n } from "../translation.js";
 import { menu } from "./menu/index.js";
 import type { MyContext, Session } from "./my-context.js";
@@ -30,6 +28,16 @@ bot.use(
 	}),
 );
 
+// Event handler for handling button presses
+bot.use(async (ctx, next) => {
+	contextStore.set(
+		ctx.callbackQuery?.from.id || 0,
+		ctx.callbackQuery?.data || "",
+	);
+
+	await next();
+});
+
 bot.use(async (ctx: MyContext, next) => {
 	// Check if the user has sent a text message
 	if (ctx.message && ctx.message.text) {
@@ -42,7 +50,11 @@ bot.use(async (ctx: MyContext, next) => {
 
 		// Process user input based on context
 		let response = "";
-		if (previousMessage === `/follow@${ctx.me.username}`||previousMessage === `/follow`) {
+		if (
+			previousMessage === `/follow@${ctx.me.username}` ||
+			previousMessage === `/follow` ||
+			previousMessage === "/follow/"
+		) {
 			if (pattern.test(userInput)) {
 				response = `You typed valid wallet address: ${userInput}.
 				 Is it right?(yes or no)`;
@@ -62,25 +74,10 @@ bot.use(async (ctx: MyContext, next) => {
 		}
 
 		contextStore.set(userId, userInput);
-//retry logic and prevent valid address and yes without follow
-//delete address
-//alert when user login
-
-
-
-		//  else {
-		// 	console.log(previousMessage);
-		// 	response = `I'm not sure how to respond to "${userInput}". Can you provide more details?`;
-		// 	contextStore.set(userId, response);
-		// }
-		// else if (previousMessage.findIndex("") !== -1) {
-		// 	console.log(previousMessage);
-		// 	response = `I'm not sure how to respond to "${userInput}". Can you provide more details?`;
-		// 	contextStore.set(userId, response);
-		// }
-
-		// Reply with the processed response
-		// await ctx.reply(response);
+		//delete address
+		//alert when user login
+		//confirm by button
+		//menu not working
 	}
 	// Continue processing other middleware and handlers
 	await next();
@@ -112,9 +109,9 @@ bot.command("html", async (ctx) => {
 const menuMiddleware = new MenuMiddleware("/", menu);
 
 bot.command("start", async (ctx) => menuMiddleware.replyToContext(ctx));
-bot.command("follow", async (ctx) =>
-	menuMiddleware.replyToContext(ctx, "/follow/"),
-);
+bot.command("follow", async (ctx) => {
+	await menuMiddleware.replyToContext(ctx, "/follow/");
+});
 bot.use(menuMiddleware.middleware());
 
 // False positive as bot is not a promise
