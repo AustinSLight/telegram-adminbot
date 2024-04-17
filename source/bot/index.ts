@@ -21,7 +21,7 @@ if (!token) {
 const bot = new Bot<MyContext>(token);
 
 // Define a simple in-memory storage for tracking context
-// const contextStore = new Map<number, string>(); // Map user IDs to previous messages
+const contextStore = new Map<number, string>(); // Map user IDs to previous messages
 
 bot.use(
 	session({
@@ -30,46 +30,61 @@ bot.use(
 	}),
 );
 
-// bot.use(async (ctx: MyContext, next) => {
-// 	// Check if the user has sent a text message
-// 	if (ctx.message && ctx.message.text) {
-// 		const userId = ctx.message.from?.id || 0;
-// 		const userInput = ctx.message.text;
-// 		const pattern = /^0x([a-fA-F0-9]{40})$/;
+bot.use(async (ctx: MyContext, next) => {
+	// Check if the user has sent a text message
+	if (ctx.message && ctx.message.text) {
+		const userId = ctx.message.from?.id || 0;
+		const userInput = ctx.message.text;
+		const pattern = /^0x([a-fA-F0-9]{40})$/;
 
-// 		// Retrieve previous message from context store
-// 		const previousMessage = contextStore.get(userId);
+		// Retrieve previous message from context store
+		const previousMessage = contextStore.get(userId);
 
-// 		// Process user input based on context
-// 		let response = "";
-// 		console.log(previousMessage);
-// 		if (previousMessage === "/follow") {
-// 			if (pattern.test(userInput)) {
-// 				console.log(userInput);
-// 				response = `You typed valid wallet address: ${userInput}. Is it right?(yes or no)`;
-// 				contextStore.set(userId, response);
-// 			} else {
-// 				response = `Invalid wallet address. Please go back to menu and try again.`;
-// 				contextStore.set(userId, response);
-// 			}
-// 		} else {
-// 			console.log(previousMessage);
-// 			response = `I'm not sure how to respond to "${userInput}". Can you provide more details?`;
-// 			contextStore.set(userId, response);
-// 		}
-// 		// else if (previousMessage.findIndex("") !== -1) {
-// 		// 	console.log(previousMessage);
-// 		// 	response = `I'm not sure how to respond to "${userInput}". Can you provide more details?`;
-// 		// 	contextStore.set(userId, response);
-// 		// }
+		// Process user input based on context
+		let response = "";
+		if (previousMessage === `/follow@${ctx.me.username}`||previousMessage === `/follow`) {
+			if (pattern.test(userInput)) {
+				response = `You typed valid wallet address: ${userInput}.
+				 Is it right?(yes or no)`;
+			} else {
+				response = `Invalid wallet address. Please go back to menu and try again.`;
+			}
+			await ctx.reply(response);
+		}
+		if (
+			pattern.test(previousMessage || "") &&
+			(userInput === "yes" || userInput === "y")
+		) {
+			console.log(userInput);
+			await ctx.reply(
+				"you followed the telegram channel and now you can check it on the website launchpad buy page. https://astradao.org",
+			);
+		}
 
-// 		// Reply with the processed response
-// 		await ctx.reply(response);
-// 	}
+		contextStore.set(userId, userInput);
+//retry logic and prevent valid address and yes without follow
+//delete address
+//alert when user login
 
-// 	// Continue processing other middleware and handlers
-// 	await next();
-// });
+
+
+		//  else {
+		// 	console.log(previousMessage);
+		// 	response = `I'm not sure how to respond to "${userInput}". Can you provide more details?`;
+		// 	contextStore.set(userId, response);
+		// }
+		// else if (previousMessage.findIndex("") !== -1) {
+		// 	console.log(previousMessage);
+		// 	response = `I'm not sure how to respond to "${userInput}". Can you provide more details?`;
+		// 	contextStore.set(userId, response);
+		// }
+
+		// Reply with the processed response
+		// await ctx.reply(response);
+	}
+	// Continue processing other middleware and handlers
+	await next();
+});
 
 bot.use(i18n.middleware());
 
@@ -101,14 +116,7 @@ bot.command("follow", async (ctx) =>
 	menuMiddleware.replyToContext(ctx, "/follow/"),
 );
 bot.use(menuMiddleware.middleware());
-bot.hears(/^0x[a-fA-F0-9]{40}$/, (ctx) => {
-	console.log(ctx.match[0]);
 
-	ctx.reply("Valid");
-});
-bot.on("message:text", (ctx) =>
-	ctx.reply(`Invalid address. Type only Address.`),
-);
 // False positive as bot is not a promise
 // eslint-disable-next-line unicorn/prefer-top-level-await
 bot.catch((error) => {
