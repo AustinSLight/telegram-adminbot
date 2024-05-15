@@ -1,28 +1,25 @@
-import {MenuTemplate} from 'grammy-inline-menu';
-import type {MyContext} from '../my-context.js';
-import {menu as settingsMenu} from './settings/index.js';
+import { MenuTemplate } from "grammy-inline-menu";
+import type { MyContext } from "../my-context.js";
 
-export const menu = new MenuTemplate<MyContext>(ctx =>
-	ctx.t('welcome', {name: ctx.from!.first_name}),
+export const menu = new MenuTemplate<MyContext>((ctx) =>
+	ctx.t("welcome", {
+		name: ctx.from!.first_name
+	}),
 );
-
 menu.url({
-	text: 'Astra Dao Launchpad(test net)',
-	url: 'https://next.test.astradao.org/launchpad',
-});
-menu.url({
-	text: 'Buy Astra Dao (test net)',
-	url: 'https://next.test.astradao.org/how-to-buy',
+	text: "Astra Dao Launchpad(test net)",
+	url: "https://next.test.astradao.org/launchpad",
 });
 menu.url({
-	text: 'Astra Dao Owner(test net)',
-	url: 'https://next.test.astradao.org/launchpad/owner',
+	text: "Buy Astra Dao (test net)",
+	url: "https://next.test.astradao.org/how-to-buy",
+});
+menu.url({
+	text: "Astra Dao Owner(test net)",
+	url: "https://t.me/astraTokenTelegramBot",
 });
 
-// menu.submenu('settings', settingsMenu, {
-// 	text: ctx => '⚙️' + ctx.t('menu-settings'),
-// });
-menu.submenu('follow', settingsMenu, {
-	text: ctx => '✅' + ctx.t('menu-settings'),
+menu.url({
+	text:  "✅Follow",
+	url: 'https://t.me/astraTokenTelegramBot'
 });
-
