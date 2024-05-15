@@ -1,7 +1,6 @@
 welcome =
   Welcome {$name}!
-  Nice to meet you.
-  You can go to our homepage using the button below.
+  You can visit our homepage using the button below.
   And using following button, you can send your address to Astra Dao.
 
   

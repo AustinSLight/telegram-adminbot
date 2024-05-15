@@ -10,14 +10,14 @@ menu.url({
 	text: "Astra Dao Launchpad(test net)",
 	url: "https://next.test.astradao.org/launchpad",
 });
-menu.url({
-	text: "Buy Astra Dao (test net)",
-	url: "https://next.test.astradao.org/how-to-buy",
-});
-menu.url({
-	text: "Astra Dao Owner(test net)",
-	url: "https://t.me/astraTokenTelegramBot",
-});
+// menu.url({
+// 	text: "Buy Astra Dao (test net)",
+// 	url: "https://next.test.astradao.org/how-to-buy",
+// });
+// menu.url({
+// 	text: "Astra Dao Owner(test net)",
+// 	url: "https://t.me/astraTokenTelegramBot",
+// });
 
 menu.url({
 	text:  "✅Follow",
